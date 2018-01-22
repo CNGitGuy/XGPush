@@ -45,6 +45,9 @@ import com.xgpush.cloud.XingeApp;
 import com.xgpush.common.CommonWorkingThread;
 import com.xgpush.common.ExtendedListView;
 
+/**
+ * 诊断APP是否能够连接到信鸽服务器
+ */
 public class DiagnosisActivity extends Activity implements ExtendedListView.OnPositionChangedListener {
 
     private DummyAdapter adapter;
@@ -201,7 +204,8 @@ public class DiagnosisActivity extends Activity implements ExtendedListView.OnPo
 
                                     @Override
                                     public void onFail(Object data, int errCode, String msg) {
-                                        StringBuffer sb = new StringBuffer((System.currentTimeMillis() - currentTimeMillis) + "ms 信鸽终端注册失败!\r\n").append(msg).append(errCode).append("!\r\n");
+                                        StringBuffer sb = new StringBuffer((System.currentTimeMillis() - currentTimeMillis) + "ms 信鸽终端注册失败!\r\n")
+                                                .append(msg).append(errCode).append("!\r\n");
                                         sb.append(errCodeHandle(errCode));
                                         updateProgress("+++ register push failed. token:" + data);
                                     }
@@ -210,7 +214,8 @@ public class DiagnosisActivity extends Activity implements ExtendedListView.OnPo
 
                     @Override
                     public void onFail(Object data, int errCode, String msg) {
-                        StringBuffer sb = new StringBuffer((System.currentTimeMillis() - currentTimeMillis) + "ms 信鸽终端反注册失败!\r\n").append(msg).append(errCode).append("!\r\n");
+                        StringBuffer sb = new StringBuffer((System.currentTimeMillis() - currentTimeMillis) + "ms 信鸽终端反注册失败!\r\n")
+                                .append(msg).append(errCode).append("!\r\n");
                         sb.append(errCodeHandle(errCode));
                         updateProgress(sb.toString());
                     }

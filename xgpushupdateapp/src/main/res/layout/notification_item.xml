@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="65dp"
+    android:background="@color/white"
+    android:gravity="center"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp">
+
+    <TextView
+        android:id="@+id/tv_fileName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="2dp"
+        android:layout_marginLeft="@dimen/ten"
+        android:layout_marginStart="@dimen/ten"
+        android:text="@string/downloading"
+        android:layout_toEndOf="@+id/imageView3"
+        android:layout_toRightOf="@+id/imageView3"
+        android:textColor="@color/card_content_title_text_color"
+        android:textSize="14sp" />
+
+    <ProgressBar
+        android:id="@+id/pb_progress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+        android:max="100"
+        android:progressDrawable="@drawable/progressstyle"
+        android:layout_centerVertical="true"
+        android:layout_alignLeft="@+id/tv_fileName"
+        android:layout_alignStart="@+id/tv_fileName"
+        android:layout_below="@+id/tv_fileName"/>
+
+    <TextView
+        android:id="@+id/service_tips"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignLeft="@+id/tv_fileName"
+        android:layout_alignStart="@+id/tv_fileName"
+        android:layout_below="@+id/tv_fileName"
+        android:textColor="@color/rename_btn_textcolor"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/btn_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorPrimary"
+        android:textSize="16sp"
+        android:layout_below="@+id/pb_progress"
+        android:layout_alignRight="@+id/pb_progress"
+        android:layout_alignEnd="@+id/pb_progress" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:src="@mipmap/ic_launcher" />
+</RelativeLayout>

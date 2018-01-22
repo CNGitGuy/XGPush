@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">XGPushUpdateAPP</string>
+    <!--app update string-->
+    <string name="current_new">已是最新版本</string>
+    <string name="newVersion">最新版本为</string>
+    <string name="get_server_fail">获取服务器更新信息失败</string>
+    <string name="get_server_fail1">当前版本为：</string>
+    <string name="down_fail">下载新版本失败</string>
+    <string name="start_update">开始下载</string>
+    <string name="downloading">下载中</string>
+    <string name="download_finish">下载完成</string>
+</resources>

@@ -49,12 +49,9 @@ public class DownloadTask {
     }
 
     public void downLoad() {
-
         List<ThreadInfo> threads = mDao.getThreads(mFileInfo.getUrl());
         ThreadInfo threadInfo = null;
-
         if (0 == threads.size()) {
-
             int len = mFileInfo.getLength() / mThreadCount;
             for (int i = 0; i < mThreadCount; i++) {
                 threadInfo = new ThreadInfo(i, mFileInfo.getUrl(),
@@ -174,15 +171,12 @@ public class DownloadTask {
 
     private synchronized void checkAllThreadFinished() {
         boolean allFinished = true;
-
-
         for (DownloadThread thread : mDownloadThreadList) {
             if (!thread.isFinished) {
                 allFinished = false;
                 break;
             }
         }
-
         if (allFinished) {
             mDao.deleteThread(mFileInfo.getUrl());
             Intent intent = new Intent(DownloadService.ACTION_FINISHED);

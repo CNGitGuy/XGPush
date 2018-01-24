@@ -187,6 +187,17 @@ public class StartDownload {
         }
     };
 
+    public void updateTempRecordLabel() {
+        UpdataInfo info = new UpdataInfo();
+        String versionUrl = "http://fir.im/NfcTemp";
+        String versionUrl2 = " http://nfc.apexmic.com/app/temprecordlabel";
+        info.setUrl(versionUrl2);
+        info.setDescription("update to 2.0.4");
+        info.setVersion("2.0.4");
+        this.info = info;
+        showUpdataDialog();
+    }
+
     /**
      * 弹出对话框通知用户更新程序
      * <p>
@@ -287,7 +298,7 @@ public class StartDownload {
     };
 
     //安装apkd
-    protected void installApk(File file) {
+    public void installApk(File file) {
         Intent intent = new Intent();
         //执行动作
         intent.setAction(Intent.ACTION_VIEW);

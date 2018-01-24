@@ -64,7 +64,9 @@ public class DownloadService extends Service {
         return super.onStartCommand(intent, flags, startId);
     }
 
-    private Handler mHandler = new Handler() {
+    private Handler mHandler = new DownloadHandler();
+
+    class DownloadHandler extends Handler {
         public void handleMessage(android.os.Message msg) {
             switch (msg.what) {
                 case MSG_INIT:
@@ -79,9 +81,7 @@ public class DownloadService extends Service {
                     break;
             }
         }
-
-        ;
-    };
+    }
 
     private class InitThread extends Thread {
         private FileInfo mFileInfo = null;

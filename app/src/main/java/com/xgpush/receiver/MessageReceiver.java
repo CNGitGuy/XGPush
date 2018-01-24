@@ -25,7 +25,7 @@ public class MessageReceiver extends XGPushBaseReceiver {
     public static final String LogTag = "TPushReceiver";
 
     private void show(Context context, String text) {
-		Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
     }
 
     // 通知展示

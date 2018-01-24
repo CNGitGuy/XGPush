@@ -22,6 +22,7 @@ public class ApkUpdate {
     long mTaskId;
     String apkUrl = "http://fir.im/NfcTemp";
     String versionUrl2 = "http://nfc.apexmic.com/app/temprecordlabel";
+    String versionUrl3 = "http://nfc.apexmic.com/downloads/apk/temprecordlabel.apk";
     String apkName = "TempRecordLabel_2.0.4.apk";
 
     public ApkUpdate(Context mContext) {
@@ -41,7 +42,7 @@ public class ApkUpdate {
     }
 
     public void downloadTempRecordLabelApk() {
-        downloadAPK(apkUrl, apkName);
+        downloadAPK(versionUrl3, apkName);
     }
 
     /**
@@ -52,11 +53,11 @@ public class ApkUpdate {
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(apkUrl));
         request.setAllowedOverRoaming(false);
         //漫游网络是否可以下载
-
-        //设置文件类型，可以在下载结束后自动打开该文件
-        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
-        String mimeString = mimeTypeMap.getMimeTypeFromExtension(MimeTypeMap.getFileExtensionFromUrl(apkUrl));
-        request.setMimeType(mimeString);
+        request.setTitle("测试app");
+        request.setDescription("正在下载...");
+        request.setMimeType("application/vnd.android.package-archive");
+        request.allowScanningByMediaScanner();
+        request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE | DownloadManager.Request.NETWORK_WIFI);
         //在通知栏中显示，默认就是显示的
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE);
         request.setVisibleInDownloadsUi(true);
@@ -98,7 +99,7 @@ public class ApkUpdate {
                     break;
                 case DownloadManager.STATUS_SUCCESSFUL:
                     Lg.i(">>>下载完成");
-                                     installAPK();
+                    installAPK();
                     break;
                 case DownloadManager.STATUS_FAILED:
                     Lg.i(">>>下载失败");
@@ -110,8 +111,9 @@ public class ApkUpdate {
     /**
      * 下载到本地后执行安装
      */
-    public void installAPK() {   String downloadPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath()
-            + File.separator + apkName;
+    public void installAPK() {
+        String downloadPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath()
+                + File.separator + apkName;
         File file = new File(downloadPath);
         if (!file.exists()) return;
         Intent intent = new Intent(Intent.ACTION_VIEW);

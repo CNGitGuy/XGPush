@@ -100,18 +100,16 @@ public class MainActivity extends Activity implements OnItemClickListener,
                 new XGIOperateCallback() {
                     @Override
                     public void onSuccess(Object data, int flag) {
-                        Log.w(Constants.LogTag,
-                                "+++ register push sucess. token:" + data);
+                        Log.w(Constants.LogTag, "+++ register push sucess. token:" + data);
                         m.obj = "+++ register push sucess. token:" + data;
                         m.sendToTarget();
                     }
 
                     @Override
                     public void onFail(Object data, int errCode, String msg) {
-                        Log.w(Constants.LogTag,
-                                "+++ register push fail. token:" + data
-                                        + ", errCode:" + errCode + ",msg:"
-                                        + msg);
+                        Log.w(Constants.LogTag, "+++ register push fail. token:" + data
+                                + ", errCode:" + errCode + ",msg:"
+                                + msg);
 
                         m.obj = "+++ register push fail. token:" + data
                                 + ", errCode:" + errCode + ",msg:" + msg;
@@ -168,8 +166,7 @@ public class MainActivity extends Activity implements OnItemClickListener,
         tloadInfo.setHeight(0);
 
         // 綁定組件
-        tloadLayout.addView(tloadInfo, new LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
+        tloadLayout.addView(tloadInfo, new LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT));
 
         // 绑定提示到列表底部
@@ -230,20 +227,17 @@ public class MainActivity extends Activity implements OnItemClickListener,
 
     @Override
     protected void onNewIntent(Intent intent) {
-        // TODO Auto-generated method stub
         super.onNewIntent(intent);
         setIntent(intent);
     }
 
     @Override
     protected void onResume() {
-        // TODO Auto-generated method stub
         super.onResume();
         XGPushClickedResult click = XGPushManager.onActivityStarted(this);
         Log.d("TPush", "onResumeXGPushClickedResult:" + click);
         if (click != null) { // 判断是否来自信鸽的打开方式
-            Toast.makeText(this, "通知被点击:" + click.toString(),
-                    Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "通知被点击:" + click.toString(), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -261,24 +255,18 @@ public class MainActivity extends Activity implements OnItemClickListener,
 
     private void showSpinner() {
         View v = LayoutInflater.from(this).inflate(R.layout.menu_item, null);
-        final PopupWindow pw = new PopupWindow(v, LayoutParams.WRAP_CONTENT,
-                LayoutParams.WRAP_CONTENT);
+        final PopupWindow pw = new PopupWindow(v, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         pw.setContentView(v);
         pw.setOutsideTouchable(true);
         pw.setFocusable(true);
         pw.setBackgroundDrawable(new BitmapDrawable());
         pw.showAsDropDown(findViewById(R.id.img_right));
-        TextView action_device_token = (TextView) v
-                .findViewById(R.id.action_device_token);
-        TextView action_help_center = (TextView) v
-                .findViewById(R.id.action_help_center);
-        TextView action_about_us = (TextView) v
-                .findViewById(R.id.action_about_us);
+        TextView action_device_token = (TextView) v.findViewById(R.id.action_device_token);
+        TextView action_help_center = (TextView) v.findViewById(R.id.action_help_center);
+        TextView action_about_us = (TextView) v.findViewById(R.id.action_about_us);
         TextView action_clear = (TextView) v.findViewById(R.id.action_clear);
-        TextView action_setting = (TextView) v
-                .findViewById(R.id.action_setting);
-        TextView action_diagnosis = (TextView) v
-                .findViewById(R.id.action_diagnosis);
+        TextView action_setting = (TextView) v.findViewById(R.id.action_setting);
+        TextView action_diagnosis = (TextView) v.findViewById(R.id.action_diagnosis);
         action_device_token.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -382,12 +370,9 @@ public class MainActivity extends Activity implements OnItemClickListener,
             if (convertView == null) {
                 aholder = new pushViewHolder();
                 convertView = mInflater.inflate(R.layout.item_push, null);
-                aholder.msg_idv = (TextView) convertView
-                        .findViewById(R.id.push_msg_id);
-                aholder.contentv = (TextView) convertView
-                        .findViewById(R.id.push_content);
-                aholder.timev = (TextView) convertView
-                        .findViewById(R.id.push_time);
+                aholder.msg_idv = (TextView) convertView.findViewById(R.id.push_msg_id);
+                aholder.contentv = (TextView) convertView.findViewById(R.id.push_content);
+                aholder.timev = (TextView) convertView.findViewById(R.id.push_time);
                 aholder.titlev = (TextView) convertView
                         .findViewById(R.id.push_title);
                 convertView.setTag(aholder);
@@ -404,8 +389,7 @@ public class MainActivity extends Activity implements OnItemClickListener,
                         .substring(0, 10);
                 String notificationtime = item.getUpdate_time().substring(11);
                 if (new SimpleDateFormat("yyyy-MM-dd").format(
-                        Calendar.getInstance().getTime()).equals(
-                        notificationdate)) {
+                        Calendar.getInstance().getTime()).equals(notificationdate)) {
                     aholder.timev.setText(notificationtime);
                 } else {
                     aholder.timev.setText(notificationdate);
@@ -417,7 +401,6 @@ public class MainActivity extends Activity implements OnItemClickListener,
         }
     }
 
-    ;
 
     private class pushViewHolder {
         TextView msg_idv;
@@ -435,8 +418,7 @@ public class MainActivity extends Activity implements OnItemClickListener,
             ait.putExtra("title", xgnotification.getTitle());
             ait.putExtra("content", xgnotification.getContent());
             ait.putExtra("activity", xgnotification.getActivity());
-            ait.putExtra("notificationActionType",
-                    xgnotification.getNotificationActionType());
+            ait.putExtra("notificationActionType", xgnotification.getNotificationActionType());
             ait.putExtra("update_time", xgnotification.getUpdate_time());
             this.startActivity(ait);
         }
@@ -460,10 +442,8 @@ public class MainActivity extends Activity implements OnItemClickListener,
         if (scrollState == OnScrollListener.SCROLL_STATE_IDLE) {
             if (isLast && currentPage < pageSize) {
                 currentPage++;
-                // 设置显示位置
-                pushListV.setSelection(lastItem);
-                // 增加数据
-                appendNotifications(id);
+                pushListV.setSelection(lastItem); // 设置显示位置
+                appendNotifications(id);  // 增加数据
             } else if (firstItem == 0) {
                 if (isUpdate && tloadInfo.getHeight() >= 50) {
                     isUpdate = false;
@@ -493,8 +473,7 @@ public class MainActivity extends Activity implements OnItemClickListener,
                     });
                 }
             }
-        } else if (scrollState == OnScrollListener.SCROLL_STATE_TOUCH_SCROLL
-                && firstItem == 0) {
+        } else if (scrollState == OnScrollListener.SCROLL_STATE_TOUCH_SCROLL && firstItem == 0) {
             if (tloadInfo.getHeight() < 50) {
                 isUpdate = true;
                 tloadInfo.setHeight(50);
@@ -522,10 +501,8 @@ public class MainActivity extends Activity implements OnItemClickListener,
         // 计算总数据条数
         allRecorders = notificationService.getCount();
         getNotificationswithouthint(id);
-        Toast.makeText(
-                this,
-                "共" + allRecorders + "条信息,加载了" + adapter.getData().size()
-                        + "条信息", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "共" + allRecorders + "条信息,加载了" + adapter.getData().size()
+                + "条信息", Toast.LENGTH_SHORT).show();
     }
 
     private void updateNotifications(String id) {
@@ -533,11 +510,8 @@ public class MainActivity extends Activity implements OnItemClickListener,
         int oldAllRecorders = allRecorders;
         allRecorders = notificationService.getCount();
         getNotificationswithouthint(id);
-        Toast.makeText(
-                this,
-                "共" + allRecorders + "条信息,更新了"
-                        + (allRecorders - oldAllRecorders) + "条新信息",
-                Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "共" + allRecorders + "条信息,更新了"
+                + (allRecorders - oldAllRecorders) + "条新信息", Toast.LENGTH_SHORT).show();
     }
 
     private void getNotificationswithouthint(String id) {
@@ -576,9 +550,8 @@ public class MainActivity extends Activity implements OnItemClickListener,
         pageSize = (allRecorders + lineSize - 1) / lineSize;
         int oldsize = adapter.getData().size();
         // 更新适配器
-        adapter.getData().addAll(
-                NotificationService.getInstance(this).getScrollData(
-                        currentPage, lineSize, id));
+        adapter.getData().addAll(NotificationService.
+                getInstance(this).getScrollData(currentPage, lineSize, id));
         // 如果到了最末尾则去掉"正在加载"
         if (allRecorders == adapter.getCount()) {
             bloadInfo.setHeight(0);
@@ -589,13 +562,9 @@ public class MainActivity extends Activity implements OnItemClickListener,
             bloadLayout.setMinimumHeight(100);
             bloadLayout.setVisibility(View.VISIBLE);
         }
-        Toast.makeText(
-                this,
-                "共" + allRecorders + "条信息,加载了"
-                        + (adapter.getData().size() - oldsize) + "条信息",
-                Toast.LENGTH_SHORT).show();
-        // 通知改变
-        adapter.notifyDataSetChanged();
+        Toast.makeText(this, "共" + allRecorders + "条信息,加载了"
+                + (adapter.getData().size() - oldsize) + "条信息", Toast.LENGTH_SHORT).show();
+        adapter.notifyDataSetChanged(); // 通知改变
     }
 
     private static class HandlerExtension extends Handler {
@@ -614,8 +583,7 @@ public class MainActivity extends Activity implements OnItemClickListener,
             }
             if (msg != null) {
                 Log.w(Constants.LogTag, msg.obj.toString());
-                TextView textView = (TextView) theActivity
-                        .findViewById(R.id.deviceToken);
+                TextView textView = (TextView) theActivity.findViewById(R.id.deviceToken);
                 textView.setText(XGPushConfig.getToken(theActivity));
             }
             // XGPushManager.registerCustomNotification(theActivity,

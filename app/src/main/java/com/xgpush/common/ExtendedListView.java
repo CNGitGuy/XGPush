@@ -123,7 +123,7 @@ public class ExtendedListView extends ListView implements OnScrollListener {
             // Don't do anything if there is no itemviews
             if (totalItemCount > 0) {
                 /*
-				 * from android source code (ScrollBarDrawable.java)
+                 * from android source code (ScrollBarDrawable.java)
 				 */
                 final int thickness = getVerticalScrollbarWidth();
                 int height = Math.round((float) getMeasuredHeight() * computeVerticalScrollExtent() / computeVerticalScrollRange());

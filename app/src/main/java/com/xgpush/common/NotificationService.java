@@ -85,25 +85,29 @@ public class NotificationService {
         }
     }
 
-    public List<XGNotification> getScrollData(int currentPage, int lineSize,
-                                              String msg_id) {
+    /**
+     * 获取所有保存到本地数据库的推送
+     *
+     * @param currentPage
+     * @param lineSize
+     * @param msg_id
+     * @return
+     */
+    public List<XGNotification> getScrollData(int currentPage, int lineSize, String msg_id) {
         String firstResult = String.valueOf((currentPage - 1) * lineSize);
         SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
         Cursor cursor = null;
         try {
             if (msg_id == null || "".equals(msg_id)) {
-                cursor = db
-                        .query("notification",
-                                new String[]{"id,msg_id,title,content,activity,notificationActionType,update_time"},
-                                null, null, null, null, "update_time DESC",
-                                firstResult + "," + lineSize);
+                cursor = db.query("notification",
+                        new String[]{"id,msg_id,title,content,activity,notificationActionType,update_time"},
+                        null, null, null, null, "update_time DESC",
+                        firstResult + "," + lineSize);
             } else {
-                cursor = db
-                        .query("notification",
-                                new String[]{"id,msg_id,title,content,activity,notificationActionType,update_time"},
-                                "msg_id like ?", new String[]{msg_id + "%"},
-                                null, null, "update_time DESC", firstResult
-                                        + "," + lineSize);
+                cursor = db.query("notification",
+                        new String[]{"id,msg_id,title,content,activity,notificationActionType,update_time"},
+                        "msg_id like ?", new String[]{msg_id + "%"},
+                        null, null, "update_time DESC", firstResult + "," + lineSize);
             }
             List<XGNotification> notifications = new ArrayList<XGNotification>();
             while (cursor.moveToNext()) {

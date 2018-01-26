@@ -44,7 +44,6 @@ import android.widget.Toast;
 
 import com.tencent.android.tpush.XGCustomPushNotificationBuilder;
 import com.tencent.android.tpush.XGIOperateCallback;
-import com.tencent.android.tpush.XGPush4Msdk;
 import com.tencent.android.tpush.XGPushClickedResult;
 import com.tencent.android.tpush.XGPushConfig;
 import com.tencent.android.tpush.XGPushManager;
@@ -52,29 +51,73 @@ import com.tencent.android.tpush.common.Constants;
 import com.xgpush.common.NotificationService;
 import com.xgpush.po.XGNotification;
 
-public class MainActivity extends Activity implements OnItemClickListener,
-        OnScrollListener {
-    private LinearLayout bloadLayout;// 加载提示的布局
-    private LinearLayout tloadLayout;// 加载提示的布局
-    private TextView bloadInfo;// 加载提示
-    private TextView tloadInfo;// 加载提示
-    private ListView pushListV;// 列表
-
-    private NotificationService notificationService;// 获取通知数据服务
-    private pushAdapter adapter;// 列表适配器
-
-    private int currentPage = 1;// 默认第一页
-    private static final int lineSize = 10;// 每次显示数
-    private int allRecorders = 0;// 全部记录数
-    private int pageSize = 1;// 默认共1页
-    private boolean isLast = false;// 是否最后一条
-    private int firstItem;// 第一条显示出来的数据的游标
-    private int lastItem;// 最后显示出来数据的游标
-    private String id = "";// 查询条件
+public class MainActivity extends Activity implements OnItemClickListener {
+    /**
+     * 加载提示的布局
+     */
+    private LinearLayout bloadLayout;
+    /**
+     * 加载提示的布局
+     */
+    private LinearLayout tloadLayout;
+    /**
+     * 加载提示
+     */
+    private TextView tvBloadInfo;
+    /**
+     * 加载提示
+     */
+    private TextView tloadInfo;
+    /**
+     * 列表
+     */
+    private ListView pushListV;
+    /**
+     * 获取通知数据服务
+     */
+    private NotificationService notificationService;
+    /**
+     * 列表适配器
+     */
+    private pushAdapter adapter;
+    /**
+     * 默认第一页
+     */
+    private int currentPage = 1;
+    /**
+     * 每次显示数*
+     */
+    private static final int lineSize = 10;
+    /**
+     * 全部记录数
+     */
+    private int allRecorders = 0;
+    /**
+     * 默认共1页
+     */
+    private int pageSize = 1;
+    /**
+     * 是否最后一条
+     */
+    private boolean isLast = false;
+    /**
+     * 第一条显示出来的数据的游标
+     */
+    private int firstItem;
+    /**
+     * 最后显示出来数据的游标
+     */
+    private int lastItem;
+    /**
+     * 查询条件
+     */
+    private String id = "";
     private boolean isUpdate = false;
     private MsgReceiver updateListViewReceiver;
     Message m = null;
     private Context context;
+
+    OnScrollListener onScrollListener = new OnScrollListenerImp();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,7 +172,7 @@ public class MainActivity extends Activity implements OnItemClickListener,
         // 点击事件
         pushListV.setOnItemClickListener(this);
         // 滑动事件
-        pushListV.setOnScrollListener(this);
+        pushListV.setOnScrollListener(onScrollListener);
 
         // 3. 创建一个角标线性布局来显示正在加载
         bloadLayout = new LinearLayout(this);
@@ -137,14 +180,14 @@ public class MainActivity extends Activity implements OnItemClickListener,
         bloadLayout.setGravity(Gravity.CENTER);
 
         // 定义一个文本显示"正在加载文本"
-        bloadInfo = new TextView(this);
-        bloadInfo.setTextSize(16);
-        bloadInfo.setTextColor(Color.parseColor("#858585"));
-        bloadInfo.setText("加载更多...");
-        bloadInfo.setGravity(Gravity.CENTER);
+        tvBloadInfo = new TextView(this);
+        tvBloadInfo.setTextSize(16);
+        tvBloadInfo.setTextColor(Color.parseColor("#858585"));
+        tvBloadInfo.setText("加载更多...");
+        tvBloadInfo.setGravity(Gravity.CENTER);
 
         // 綁定組件
-        bloadLayout.addView(bloadInfo, new LayoutParams(
+        bloadLayout.addView(tvBloadInfo, new LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT));
         bloadLayout.getBottom();
@@ -261,12 +304,12 @@ public class MainActivity extends Activity implements OnItemClickListener,
         pw.setFocusable(true);
         pw.setBackgroundDrawable(new BitmapDrawable());
         pw.showAsDropDown(findViewById(R.id.img_right));
-        TextView action_device_token = (TextView) v.findViewById(R.id.action_device_token);
-        TextView action_help_center = (TextView) v.findViewById(R.id.action_help_center);
-        TextView action_about_us = (TextView) v.findViewById(R.id.action_about_us);
-        TextView action_clear = (TextView) v.findViewById(R.id.action_clear);
-        TextView action_setting = (TextView) v.findViewById(R.id.action_setting);
-        TextView action_diagnosis = (TextView) v.findViewById(R.id.action_diagnosis);
+        TextView action_device_token = v.findViewById(R.id.action_device_token);
+        TextView action_help_center = v.findViewById(R.id.action_help_center);
+        TextView action_about_us = v.findViewById(R.id.action_about_us);
+        TextView action_clear = v.findViewById(R.id.action_clear);
+        TextView action_setting = v.findViewById(R.id.action_setting);
+        TextView action_diagnosis = v.findViewById(R.id.action_diagnosis);
         action_device_token.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -370,10 +413,10 @@ public class MainActivity extends Activity implements OnItemClickListener,
             if (convertView == null) {
                 aholder = new pushViewHolder();
                 convertView = mInflater.inflate(R.layout.item_push, null);
-                aholder.msg_idv = (TextView) convertView.findViewById(R.id.push_msg_id);
-                aholder.contentv = (TextView) convertView.findViewById(R.id.push_content);
-                aholder.timev = (TextView) convertView.findViewById(R.id.push_time);
-                aholder.titlev = (TextView) convertView
+                aholder.msg_idv = convertView.findViewById(R.id.push_msg_id);
+                aholder.contentv = convertView.findViewById(R.id.push_content);
+                aholder.timev = convertView.findViewById(R.id.push_time);
+                aholder.titlev = convertView
                         .findViewById(R.id.push_title);
                 convertView.setTag(aholder);
             } else {
@@ -411,83 +454,23 @@ public class MainActivity extends Activity implements OnItemClickListener,
 
     @Override
     public void onItemClick(AdapterView<?> arg0, View view, int index, long pram) {
-        Intent ait = new Intent(this, MsgInfoActivity.class);
+        Intent intent = new Intent(this, MsgInfoActivity.class);
         if (index > 0 && index <= lastItem) {
             XGNotification xgnotification = adapter.getData().get(index - 1);
-            ait.putExtra("msg_id", xgnotification.getMsg_id());
-            ait.putExtra("title", xgnotification.getTitle());
-            ait.putExtra("content", xgnotification.getContent());
-            ait.putExtra("activity", xgnotification.getActivity());
-            ait.putExtra("notificationActionType", xgnotification.getNotificationActionType());
-            ait.putExtra("update_time", xgnotification.getUpdate_time());
-            this.startActivity(ait);
-        }
-    }
-
-    @Override
-    public void onScroll(AbsListView view, int firstVisibleItem,
-                         int visibleItemCount, int totalItemCount) {
-        firstItem = firstVisibleItem;
-        lastItem = totalItemCount - 1;
-        if (firstVisibleItem + visibleItemCount == totalItemCount) {
-            isLast = true;
-        } else {
-            isLast = false;
-        }
-    }
-
-    @Override
-    public void onScrollStateChanged(AbsListView view, int scrollState) {
-        // 是否到最底部并且数据还没读完
-        if (scrollState == OnScrollListener.SCROLL_STATE_IDLE) {
-            if (isLast && currentPage < pageSize) {
-                currentPage++;
-                pushListV.setSelection(lastItem); // 设置显示位置
-                appendNotifications(id);  // 增加数据
-            } else if (firstItem == 0) {
-                if (isUpdate && tloadInfo.getHeight() >= 50) {
-                    isUpdate = false;
-                    updateNotifications(id);
-                    TranslateAnimation alp = new TranslateAnimation(0, 0, 80, 0);
-                    alp.setDuration(1000);
-                    alp.setRepeatCount(1);
-                    tloadLayout.setAnimation(alp);
-                    alp.setAnimationListener(new AnimationListener() {
-
-                        @Override
-                        public void onAnimationStart(Animation animation) {
-                            tloadInfo.setText("正在更新...");
-                        }
-
-                        @Override
-                        public void onAnimationRepeat(Animation animation) {
-                        }
-
-                        @Override
-                        public void onAnimationEnd(Animation animation) {
-                            tloadInfo.setText("更多新消息...");
-                            tloadLayout.setVisibility(View.GONE);
-                            tloadInfo.setHeight(0);
-                            tloadLayout.setMinimumHeight(0);
-                        }
-                    });
-                }
-            }
-        } else if (scrollState == OnScrollListener.SCROLL_STATE_TOUCH_SCROLL && firstItem == 0) {
-            if (tloadInfo.getHeight() < 50) {
-                isUpdate = true;
-                tloadInfo.setHeight(50);
-                tloadLayout.setMinimumHeight(100);
-                tloadLayout.setVisibility(View.VISIBLE);
-            }
+            intent.putExtra("msg_id", xgnotification.getMsg_id());
+            intent.putExtra("title", xgnotification.getTitle());
+            intent.putExtra("content", xgnotification.getContent());
+            intent.putExtra("activity", xgnotification.getActivity());
+            intent.putExtra("notificationActionType", xgnotification.getNotificationActionType());
+            intent.putExtra("update_time", xgnotification.getUpdate_time());
+            this.startActivity(intent);
         }
     }
 
     private void getOverflowMenu() {
         try {
             ViewConfiguration config = ViewConfiguration.get(this);
-            Field menuKeyField = ViewConfiguration.class
-                    .getDeclaredField("sHasPermanentMenuKey");
+            Field menuKeyField = ViewConfiguration.class.getDeclaredField("sHasPermanentMenuKey");
             if (menuKeyField != null) {
                 menuKeyField.setAccessible(true);
                 menuKeyField.setBoolean(config, false);
@@ -531,12 +514,12 @@ public class MainActivity extends Activity implements OnItemClickListener,
                 currentPage = 1, lineSize, id));
         if (allRecorders <= lineSize) {
             bloadLayout.setVisibility(View.GONE);
-            bloadInfo.setHeight(0);
+            tvBloadInfo.setHeight(0);
             bloadLayout.setMinimumHeight(0);
         } else {
             if (pushListV.getFooterViewsCount() < 1) {
                 bloadLayout.setVisibility(View.VISIBLE);
-                bloadInfo.setHeight(50);
+                tvBloadInfo.setHeight(50);
                 bloadLayout.setMinimumHeight(100);
             }
         }
@@ -554,11 +537,11 @@ public class MainActivity extends Activity implements OnItemClickListener,
                 getInstance(this).getScrollData(currentPage, lineSize, id));
         // 如果到了最末尾则去掉"正在加载"
         if (allRecorders == adapter.getCount()) {
-            bloadInfo.setHeight(0);
+            tvBloadInfo.setHeight(0);
             bloadLayout.setMinimumHeight(0);
             bloadLayout.setVisibility(View.GONE);
         } else {
-            bloadInfo.setHeight(50);
+            tvBloadInfo.setHeight(50);
             bloadLayout.setMinimumHeight(100);
             bloadLayout.setVisibility(View.VISIBLE);
         }
@@ -583,7 +566,7 @@ public class MainActivity extends Activity implements OnItemClickListener,
             }
             if (msg != null) {
                 Log.w(Constants.LogTag, msg.obj.toString());
-                TextView textView = (TextView) theActivity.findViewById(R.id.deviceToken);
+                TextView textView = theActivity.findViewById(R.id.deviceToken);
                 textView.setText(XGPushConfig.getToken(theActivity));
             }
             // XGPushManager.registerCustomNotification(theActivity,
@@ -600,5 +583,66 @@ public class MainActivity extends Activity implements OnItemClickListener,
             getNotificationswithouthint(id);
         }
     }
+
+    class OnScrollListenerImp implements OnScrollListener {
+        @Override
+        public void onScrollStateChanged(AbsListView view, int scrollState) {
+            // 是否到最底部并且数据还没读完
+            if (scrollState == OnScrollListener.SCROLL_STATE_IDLE) {
+                if (isLast && currentPage < pageSize) {
+                    currentPage++;
+                    pushListV.setSelection(lastItem); // 设置显示位置
+                    appendNotifications(id);  // 增加数据
+                } else if (firstItem == 0) {
+                    if (isUpdate && tloadInfo.getHeight() >= 50) {
+                        isUpdate = false;
+                        updateNotifications(id);
+                        TranslateAnimation alp = new TranslateAnimation(0, 0, 80, 0);
+                        alp.setDuration(1000);
+                        alp.setRepeatCount(1);
+                        tloadLayout.setAnimation(alp);
+                        alp.setAnimationListener(new AnimationListener() {
+
+                            @Override
+                            public void onAnimationStart(Animation animation) {
+                                tloadInfo.setText("正在更新...");
+                            }
+
+                            @Override
+                            public void onAnimationRepeat(Animation animation) {
+                            }
+
+                            @Override
+                            public void onAnimationEnd(Animation animation) {
+                                tloadInfo.setText("更多新消息...");
+                                tloadLayout.setVisibility(View.GONE);
+                                tloadInfo.setHeight(0);
+                                tloadLayout.setMinimumHeight(0);
+                            }
+                        });
+                    }
+                }
+            } else if (scrollState == OnScrollListener.SCROLL_STATE_TOUCH_SCROLL && firstItem == 0) {
+                if (tloadInfo.getHeight() < 50) {
+                    isUpdate = true;
+                    tloadInfo.setHeight(50);
+                    tloadLayout.setMinimumHeight(100);
+                    tloadLayout.setVisibility(View.VISIBLE);
+                }
+            }
+        }
+
+        @Override
+        public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+            firstItem = firstVisibleItem;
+            lastItem = totalItemCount - 1;
+            if (firstVisibleItem + visibleItemCount == totalItemCount) {
+                isLast = true;
+            } else {
+                isLast = false;
+            }
+        }
+    }
+
 
 }

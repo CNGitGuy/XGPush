@@ -24,7 +24,7 @@ public class MessageReceiver extends XGPushBaseReceiver {
     private Intent intent = new Intent("com.qq.xgdemo.activity.UPDATE_LISTVIEW");
     public static final String LogTag = "TPushReceiver";
 
-    private void show(Context context, String text) {
+    private void showToast(Context context, String text) {
         Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
     }
 
@@ -48,7 +48,7 @@ public class MessageReceiver extends XGPushBaseReceiver {
                 .format(Calendar.getInstance().getTime()));
         NotificationService.getInstance(context).save(notific);
         context.sendBroadcast(intent);
-        show(context, "您有1条新消息, " + "通知被展示 ， " + notifiShowedRlt.toString());
+        showToast(context, "您有1条新消息, " + "通知被展示 ， " + notifiShowedRlt.toString());
     }
 
     @Override
@@ -63,7 +63,7 @@ public class MessageReceiver extends XGPushBaseReceiver {
             text = "反注册失败" + errorCode;
         }
         Log.d(LogTag, text);
-        show(context, text);
+        showToast(context, text);
 
     }
 
@@ -79,7 +79,7 @@ public class MessageReceiver extends XGPushBaseReceiver {
             text = "\"" + tagName + "\"设置失败,错误码：" + errorCode;
         }
         Log.d(LogTag, text);
-        show(context, text);
+        showToast(context, text);
 
     }
 
@@ -95,14 +95,13 @@ public class MessageReceiver extends XGPushBaseReceiver {
             text = "\"" + tagName + "\"删除失败,错误码：" + errorCode;
         }
         Log.d(LogTag, text);
-        show(context, text);
+        showToast(context, text);
 
     }
 
     // 通知点击回调 actionType=1为该消息被清除，actionType=0为该消息被点击
     @Override
-    public void onNotifactionClickedResult(Context context,
-                                           XGPushClickedResult message) {
+    public void onNotifactionClickedResult(Context context, XGPushClickedResult message) {
         if (context == null || message == null) {
             return;
         }
@@ -136,12 +135,11 @@ public class MessageReceiver extends XGPushBaseReceiver {
         }
         // APP自主处理的过程。。。
         Log.d(LogTag, text);
-        show(context, text);
+        showToast(context, text);
     }
 
     @Override
-    public void onRegisterResult(Context context, int errorCode,
-                                 XGPushRegisterResult message) {
+    public void onRegisterResult(Context context, int errorCode, XGPushRegisterResult message) {
         // TODO Auto-generated method stub
         if (context == null || message == null) {
             return;
@@ -155,10 +153,10 @@ public class MessageReceiver extends XGPushBaseReceiver {
             text = message + "注册失败，错误码：" + errorCode;
         }
         Log.d(LogTag, text);
-        show(context, text);
+        showToast(context, text);
     }
 
-    // 消息透传
+    // 消息透传,收到应用内推送
     @Override
     public void onTextMessage(Context context, XGPushTextMessage message) {
         // TODO Auto-generated method stub
@@ -180,7 +178,7 @@ public class MessageReceiver extends XGPushBaseReceiver {
         }
         // APP自主处理消息的过程...
         Log.d(LogTag, text);
-        show(context, text);
+        showToast(context, text);
     }
 
 }

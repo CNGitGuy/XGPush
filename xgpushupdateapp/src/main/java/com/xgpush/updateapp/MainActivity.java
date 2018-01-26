@@ -6,8 +6,10 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Toast;
 
 import com.xgpush.updateapp.utils.ApkUpdate;
+import com.xgpush.updateapp.utils.AppInstallUtil;
 
 import java.io.File;
 
@@ -28,6 +30,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.btnCheckUpdate).setOnClickListener(this);
         findViewById(R.id.btnUninstall).setOnClickListener(this);
         findViewById(R.id.btnInstall).setOnClickListener(this);
+        findViewById(R.id.btnCommand).setOnClickListener(this);
+        findViewById(R.id.btnCommand2).setOnClickListener(this);
     }
 
     @Override
@@ -45,6 +49,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.btnInstall:
                 apkUpdate.installAPK();
+                break;
+            case R.id.btnCommand:
+                apkUpdate.installSilent(this);
+                break;
+            case R.id.btnCommand2:
+                apkUpdate.installCommand(this);
                 break;
         }
     }

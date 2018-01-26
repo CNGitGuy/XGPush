@@ -1,5 +1,6 @@
 package com.xgpush.updateapp.utils;
 
+import android.app.Activity;
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -9,6 +10,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
 import android.webkit.MimeTypeMap;
+import android.widget.Toast;
 
 import java.io.File;
 
@@ -122,5 +124,43 @@ public class ApkUpdate {
         //在服务中开启activity必须设置flag,后面解释
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         mContext.startActivity(intent);
+    }
+
+    public void installSilent(final Activity context) {
+        final String downloadPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath()
+                + File.separator + apkName;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final int result = AppInstallUtil.installSilent(downloadPath);
+                context.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showToast(context, result == 0 ? "Success" : (result == 1 ? "File not found" : "Failed"));
+                    }
+                });
+            }
+        }).start();
+    }
+
+    public void installCommand(final Activity activity) {
+        final String downloadPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath()
+                + File.separator + apkName;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final boolean result = AppInstallUtil.install(downloadPath);
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showToast(activity, result ? "Success" : "Failed");
+                    }
+                });
+            }
+        }).start();
+    }
+
+    void showToast(Context context, String result) {
+        Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
     }
 }

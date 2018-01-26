@@ -9,8 +9,9 @@
         android:id="@+id/btnCheckUpdate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
+        android:layout_marginTop="49dp"
         android:text="Check &amp; Update" />
 
     <Button
@@ -29,6 +30,25 @@
         android:layout_below="@+id/btnUninstall"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="11dp"
-        android:text="install" />
+        android:text="本地普通安装" />
+
+    <Button
+        android:id="@+id/btnCommand"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnInstall"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="22dp"
+        android:text="命令静默安装" />
+
+    <Button
+        android:id="@+id/btnCommand2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/btnCommand"
+        android:layout_alignStart="@+id/btnCommand"
+        android:layout_below="@+id/btnCommand"
+        android:layout_marginTop="22dp"
+        android:text="命令静默安装2" />
 
 </RelativeLayout>

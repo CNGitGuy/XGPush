@@ -76,9 +76,8 @@ public class SettingActivity extends Activity {
     @SuppressWarnings("unused")
     private void initCustomPushNotificationBuilder(Context context) {
         XGCustomPushNotificationBuilder build = new XGCustomPushNotificationBuilder();
-        build.setSound(
-                RingtoneManager.getActualDefaultRingtoneUri(
-                        getApplicationContext(), RingtoneManager.TYPE_ALARM)) // 设置声音
+        build.setSound(RingtoneManager.getActualDefaultRingtoneUri(
+                getApplicationContext(), RingtoneManager.TYPE_ALARM)) // 设置声音
                 // setSound(
                 // Uri.parse("android.resource://" + getPackageName()
                 // + "/" + R.raw.wind)) 设定Raw下指定声音文件
@@ -152,171 +151,137 @@ public class SettingActivity extends Activity {
     private void initComponent() {
         // initCustomPushNotificationBuilder(getApplicationContext());
         // initNotificationBuilder(getApplicationContext());
-        findViewById(R.id.Button_register).setOnClickListener(
-                new OnClickListener() {
+        findViewById(R.id.Button_register).setOnClickListener(new OnClickListener() {
 
-                    @Override
-                    public void onClick(View v) {
-                        // 注册应用（必须调用本接口，否则APP将无法接收到通知和消息）
-                        // registerPush有2个版本的接口：带账号绑定和不带
-                        // registerPush可以在APP启动时或用户登陆后调用
-                        XGPushManager.registerPush(getApplicationContext());
-                    }
-                });
-        findViewById(R.id.Button_registerAccount).setOnClickListener(
-                new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 注册应用（必须调用本接口，否则APP将无法接收到通知和消息）
+                // registerPush有2个版本的接口：带账号绑定和不带
+                // registerPush可以在APP启动时或用户登陆后调用
+                XGPushManager.registerPush(getApplicationContext());
+            }
+        });
+        findViewById(R.id.Button_registerAccount).setOnClickListener(new OnClickListener() {
 
-                    @Override
-                    public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
 
-                        Context ctx = context;
-                        if (ctx != null) {
-                            LinearLayout layout = new LinearLayout(ctx);
-                            layout.setOrientation(LinearLayout.VERTICAL);
-                            final EditText textviewGid = new EditText(ctx);
-                            textviewGid.setHint("请输入需要绑定的账号");
-                            layout.addView(textviewGid);
+                Context ctx = context;
+                if (ctx != null) {
+                    LinearLayout layout = new LinearLayout(ctx);
+                    layout.setOrientation(LinearLayout.VERTICAL);
+                    final EditText textviewGid = new EditText(ctx);
+                    textviewGid.setHint("请输入需要绑定的账号");
+                    layout.addView(textviewGid);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+                    builder.setView(layout);
+                    builder.setPositiveButton("账号注册", new DialogInterface.OnClickListener() {
 
-                            AlertDialog.Builder builder = new AlertDialog.Builder(
-                                    ctx);
-                            builder.setView(layout);
-                            builder.setPositiveButton("账号注册",
-                                    new DialogInterface.OnClickListener() {
-
-                                        public void onClick(
-                                                DialogInterface dialog,
-                                                int which) {
-
-                                            String text = textviewGid.getText()
-                                                    .toString();
-                                            if (text != null
-                                                    && text.length() != 0) {
-                                                // 注册应用（必须调用本接口，否则APP将无法接收到通知和消息）
-                                                // 使用绑定账号的注册接口（可针对账号下发通知和消息）
-                                                // 可以重复注册，以最后一次注册为准
-                                                XGPushManager
-                                                        .registerPush(
-                                                                getApplicationContext(),
-                                                                text);
-                                            }
-                                        }
-                                    });
-                            builder.show();
+                        public void onClick(DialogInterface dialog, int which) {
+                            String text = textviewGid.getText().toString();
+                            if (text != null && text.length() != 0) {
+                                // 注册应用（必须调用本接口，否则APP将无法接收到通知和消息）
+                                // 使用绑定账号的注册接口（可针对账号下发通知和消息）
+                                // 可以重复注册，以最后一次注册为准
+                                XGPushManager.registerPush(getApplicationContext(), text);
+                            }
                         }
-                    }
-                });
+                    });
+                    builder.show();
+                }
+            }
+        });
 
-        findViewById(R.id.Button_unregister).setOnClickListener(
-                new OnClickListener() {
+        findViewById(R.id.Button_unregister).setOnClickListener(new OnClickListener() {
 
-                    @Override
-                    public void onClick(View v) {
-                        // 反注册，调用本接口后，APP将停止接收通知和消息
-                        XGPushManager.unregisterPush(getApplicationContext());
-                    }
-                });
+            @Override
+            public void onClick(View v) {
+                // 反注册，调用本接口后，APP将停止接收通知和消息
+                XGPushManager.unregisterPush(getApplicationContext());
+            }
+        });
 
-        findViewById(R.id.Button_setTag).setOnClickListener(
-                new OnClickListener() {
+        findViewById(R.id.Button_setTag).setOnClickListener(new OnClickListener() {
 
-                    @Override
-                    public void onClick(View v) {
-                        Context ctx = context;
-                        if (ctx != null) {
-                            LinearLayout layout = new LinearLayout(ctx);
-                            layout.setOrientation(LinearLayout.VERTICAL);
-                            final EditText textviewGid = new EditText(ctx);
-                            textviewGid.setHint("请输入标签名称");
-                            layout.addView(textviewGid);
+            @Override
+            public void onClick(View v) {
+                Context ctx = context;
+                if (ctx != null) {
+                    LinearLayout layout = new LinearLayout(ctx);
+                    layout.setOrientation(LinearLayout.VERTICAL);
+                    final EditText textviewGid = new EditText(ctx);
+                    textviewGid.setHint("请输入标签名称");
+                    layout.addView(textviewGid);
 
-                            AlertDialog.Builder builder = new AlertDialog.Builder(
-                                    ctx);
-                            builder.setView(layout);
-                            builder.setPositiveButton("设置标签",
-                                    new DialogInterface.OnClickListener() {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+                    builder.setView(layout);
+                    builder.setPositiveButton("设置标签", new DialogInterface.OnClickListener() {
 
-                                        public void onClick(
-                                                DialogInterface dialog,
-                                                int which) {
-
-                                            String text = textviewGid.getText()
-                                                    .toString();
-                                            if (text != null
-                                                    && text.length() != 0) {
-                                                XGPushManager
-                                                        .setTag(getApplicationContext(),
-                                                                text);
-                                            }
-                                        }
-                                    });
-                            builder.show();
+                        public void onClick(
+                                DialogInterface dialog,
+                                int which) {
+                            String text = textviewGid.getText().toString();
+                            if (text != null && text.length() != 0) {
+                                XGPushManager.setTag(getApplicationContext(), text);
+                            }
                         }
-                    }
-                });
-        findViewById(R.id.Button_delTag).setOnClickListener(
-                new OnClickListener() {
+                    });
+                    builder.show();
+                }
+            }
+        });
+        findViewById(R.id.Button_delTag).setOnClickListener(new OnClickListener() {
 
-                    @Override
-                    public void onClick(View v) {
-                        Context ctx = context;
-                        if (ctx != null) {
-                            LinearLayout layout = new LinearLayout(ctx);
-                            layout.setOrientation(LinearLayout.VERTICAL);
-                            final EditText textviewGid = new EditText(ctx);
-                            textviewGid.setHint("请输入标签名称");
-                            layout.addView(textviewGid);
+            @Override
+            public void onClick(View v) {
+                Context ctx = context;
+                if (ctx != null) {
+                    LinearLayout layout = new LinearLayout(ctx);
+                    layout.setOrientation(LinearLayout.VERTICAL);
+                    final EditText textviewGid = new EditText(ctx);
+                    textviewGid.setHint("请输入标签名称");
+                    layout.addView(textviewGid);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+                    builder.setView(layout);
+                    builder.setPositiveButton("删除标签", new DialogInterface.OnClickListener() {
 
-                            AlertDialog.Builder builder = new AlertDialog.Builder(
-                                    ctx);
-                            builder.setView(layout);
-                            builder.setPositiveButton("删除标签",
-                                    new DialogInterface.OnClickListener() {
-
-                                        public void onClick(
-                                                DialogInterface dialog,
-                                                int which) {
-
-                                            String text = textviewGid.getText()
-                                                    .toString();
-                                            if (text != null
-                                                    && text.length() != 0) {
-                                                XGPushManager.deleteTag(
-                                                        SettingActivity.this,
-                                                        text);
-                                            }
-                                        }
-                                    });
-                            builder.show();
+                        public void onClick(
+                                DialogInterface dialog,
+                                int which) {
+                            String text = textviewGid.getText().toString();
+                            if (text != null && text.length() != 0) {
+                                XGPushManager.deleteTag(SettingActivity.this, text);
+                            }
                         }
-                    }
-                });
+                    });
+                    builder.show();
+                }
+            }
+        });
 
-        findViewById(R.id.Button_clearCache).setOnClickListener(
-                new OnClickListener() {
+        findViewById(R.id.Button_clearCache).setOnClickListener(new OnClickListener() {
 
-                    @Override
-                    public void onClick(View v) {
-                        Tools.clearCacheServerItems(getApplicationContext());
-                        Tools.clearOptStrategyItem(getApplicationContext());
-                    }
-                });
-        findViewById(R.id.Button_copyToken).setOnClickListener(
-                new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Tools.clearCacheServerItems(getApplicationContext());
+                Tools.clearOptStrategyItem(getApplicationContext());
+            }
+        });
+        findViewById(R.id.Button_copyToken).setOnClickListener(new OnClickListener() {
 
-                    @Override
-                    public void onClick(View v) {
-                        String token = XGPushConfig
-                                .getToken(getApplicationContext());
-                        if (token != null && !"".equals(token)) {
-                            ClipboardManager copy = (ClipboardManager) SettingActivity.this
-                                    .getSystemService(Context.CLIPBOARD_SERVICE);
-                            copy.setText(token);
-                        } else {
-                            Toast.makeText(SettingActivity.this,
-                                    "请先注册，获取token！", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+            @Override
+            public void onClick(View v) {
+                String token = XGPushConfig.getToken(getApplicationContext());
+                if (token != null && !"".equals(token)) {
+                    ClipboardManager copy = (ClipboardManager) SettingActivity.this
+                            .getSystemService(Context.CLIPBOARD_SERVICE);
+                    copy.setText(token);
+                } else {
+                    Toast.makeText(SettingActivity.this,
+                            "请先注册，获取token！", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
         findViewById(R.id.arrow).setOnClickListener(new OnClickListener() {
 
             @Override

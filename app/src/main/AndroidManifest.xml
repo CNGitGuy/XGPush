@@ -133,11 +133,13 @@
         <provider
             android:name="com.tencent.android.tpush.XGPushProvider"
             android:authorities="com.xgpush.AUTH_XGPUSH"
-            android:exported="true" /><!-- 【必须】 【注意】authorities修改为 包名.TPUSH_PROVIDER, 如demo的包名为：com.xgpush -->
+            android:exported="true" />
+        <!-- 【必须】 【注意】authorities修改为 包名.TPUSH_PROVIDER, 如demo的包名为：com.xgpush -->
         <provider
             android:name="com.tencent.android.tpush.SettingsContentProvider"
             android:authorities="com.xgpush.TPUSH_PROVIDER"
-            android:exported="false" /><!-- 【必须】 【注意】authorities修改为 包名.TENCENT.MID.V3, 如demo的包名为：com.xgpush -->
+            android:exported="false" />
+        <!-- 【必须】 【注意】authorities修改为 包名.TENCENT.MID.V3, 如demo的包名为：com.xgpush -->
         <provider
             android:name="com.tencent.mid.api.MidProvider"
             android:authorities="com.xgpush.TENCENT.MID.V3"

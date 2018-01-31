@@ -16,17 +16,16 @@ public class MsgInfoActivity extends Activity {
         setContentView(R.layout.activity_msginfo);
 
         Bundle xgnotification = this.getIntent().getExtras();
-        TextView title_id = (TextView) this.findViewById(R.id.title_id);
+        TextView title_id = this.findViewById(R.id.title_id);
         title_id.setText("ID:" + xgnotification.getLong("msg_id"));
-        TextView textView = (TextView) this.findViewById(R.id.title);
+        TextView textView = this.findViewById(R.id.title);
         textView.setText(xgnotification.getString("title"));
-        textView = (TextView) this.findViewById(R.id.content);
+        textView = this.findViewById(R.id.content);
         textView.setText(xgnotification.getString("content"));
-        textView = (TextView) this.findViewById(R.id.update_time);
+        textView = this.findViewById(R.id.update_time);
         textView.setText("到达时间：" + xgnotification.getString("update_time"));
-        textView = (TextView) this.findViewById(R.id.activityType);
-        TextView textViewContent = (TextView) this
-                .findViewById(R.id.activityContent);
+        textView = this.findViewById(R.id.activityType);
+        TextView textViewContent = this.findViewById(R.id.activityContent);
         if (xgnotification.getInt("notificationActionType", 0) == 1) {
             textView.setText("特定页面：");
         } else if (xgnotification.getInt("notificationActionType", 0) == 2) {

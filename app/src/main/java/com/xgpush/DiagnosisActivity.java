@@ -187,39 +187,37 @@ public class DiagnosisActivity extends Activity implements ExtendedListView.OnPo
 
     private void step2() {
         currentTimeMillis = System.currentTimeMillis();
-        XGPushManager.unregisterPush(getApplicationContext(),
-                new XGIOperateCallback() {
+        XGPushManager.unregisterPush(getApplicationContext(), new XGIOperateCallback() {
+            @Override
+            public void onSuccess(Object data, int flag) {
+                updateProgress((System.currentTimeMillis() - currentTimeMillis) + "ms 信鸽终端反注册成功!");
+                step3();
+                XGPushManager.registerPush(getApplicationContext(), new XGIOperateCallback() {
                     @Override
                     public void onSuccess(Object data, int flag) {
-                        updateProgress((System.currentTimeMillis() - currentTimeMillis) + "ms 信鸽终端反注册成功!");
-                        step3();
-                        XGPushManager.registerPush(getApplicationContext(),
-                                new XGIOperateCallback() {
-                                    @Override
-                                    public void onSuccess(Object data, int flag) {
-                                        token = data.toString();
-                                        updateProgress((System.currentTimeMillis() - currentTimeMillis) + "ms 信鸽终端注册成功!");
-                                        step4();
-                                    }
-
-                                    @Override
-                                    public void onFail(Object data, int errCode, String msg) {
-                                        StringBuffer sb = new StringBuffer((System.currentTimeMillis() - currentTimeMillis) + "ms 信鸽终端注册失败!\r\n")
-                                                .append(msg).append(errCode).append("!\r\n");
-                                        sb.append(errCodeHandle(errCode));
-                                        updateProgress("+++ register push failed. token:" + data);
-                                    }
-                                });
+                        token = data.toString();
+                        updateProgress((System.currentTimeMillis() - currentTimeMillis) + "ms 信鸽终端注册成功!");
+                        step4();
                     }
 
                     @Override
                     public void onFail(Object data, int errCode, String msg) {
-                        StringBuffer sb = new StringBuffer((System.currentTimeMillis() - currentTimeMillis) + "ms 信鸽终端反注册失败!\r\n")
+                        StringBuffer sb = new StringBuffer((System.currentTimeMillis() - currentTimeMillis) + "ms 信鸽终端注册失败!\r\n")
                                 .append(msg).append(errCode).append("!\r\n");
                         sb.append(errCodeHandle(errCode));
-                        updateProgress(sb.toString());
+                        updateProgress("+++ register push failed. token:" + data);
                     }
                 });
+            }
+
+            @Override
+            public void onFail(Object data, int errCode, String msg) {
+                StringBuffer sb = new StringBuffer((System.currentTimeMillis() - currentTimeMillis) + "ms 信鸽终端反注册失败!\r\n")
+                        .append(msg).append(errCode).append("!\r\n");
+                sb.append(errCodeHandle(errCode));
+                updateProgress(sb.toString());
+            }
+        });
 
     }
 
@@ -414,9 +412,8 @@ public class DiagnosisActivity extends Activity implements ExtendedListView.OnPo
 
     private static Object getMetaData(Context paramContext, String name, Object defaultValue) throws NameNotFoundException {
         PackageManager packageManager = paramContext.getPackageManager();
-        ApplicationInfo applicationInfo = packageManager
-                .getApplicationInfo(paramContext.getPackageName(),
-                        PackageManager.GET_META_DATA);
+        ApplicationInfo applicationInfo = packageManager.getApplicationInfo(paramContext.getPackageName(),
+                PackageManager.GET_META_DATA);
         if (applicationInfo != null) {
             Object obj = applicationInfo.metaData.get(name);
             if (obj != null) {

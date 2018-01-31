@@ -139,26 +139,24 @@ public class MainActivity extends Activity implements OnItemClickListener {
         Handler handler = new HandlerExtension(MainActivity.this);
         m = handler.obtainMessage();
         // 注册接口
-        XGPushManager.registerPush(getApplicationContext(),
-                new XGIOperateCallback() {
-                    @Override
-                    public void onSuccess(Object data, int flag) {
-                        Log.w(Constants.LogTag, "+++ register push sucess. token:" + data);
-                        m.obj = "+++ register push sucess. token:" + data;
-                        m.sendToTarget();
-                    }
+        XGPushManager.registerPush(getApplicationContext(), new XGIOperateCallback() {
+            @Override
+            public void onSuccess(Object data, int flag) {
+                Log.w(Constants.LogTag, "+++ register push sucess. token:" + data);
+                m.obj = "+++ register push sucess. token:" + data;
+                m.sendToTarget();
+            }
 
-                    @Override
-                    public void onFail(Object data, int errCode, String msg) {
-                        Log.w(Constants.LogTag, "+++ register push fail. token:" + data
-                                + ", errCode:" + errCode + ",msg:"
-                                + msg);
+            @Override
+            public void onFail(Object data, int errCode, String msg) {
+                Log.w(Constants.LogTag, "+++ register push fail. token:" + data
+                        + ", errCode:" + errCode + ",msg:" + msg);
 
-                        m.obj = "+++ register push fail. token:" + data
-                                + ", errCode:" + errCode + ",msg:" + msg;
-                        m.sendToTarget();
-                    }
-                });
+                m.obj = "+++ register push fail. token:" + data
+                        + ", errCode:" + errCode + ",msg:" + msg;
+                m.sendToTarget();
+            }
+        });
         initView();
         // 设置通知自定义View
         // initCustomPushNotificationBuilder(getApplicationContext());
@@ -298,12 +296,12 @@ public class MainActivity extends Activity implements OnItemClickListener {
 
     private void showSpinner() {
         View v = LayoutInflater.from(this).inflate(R.layout.menu_item, null);
-        final PopupWindow pw = new PopupWindow(v, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-        pw.setContentView(v);
-        pw.setOutsideTouchable(true);
-        pw.setFocusable(true);
-        pw.setBackgroundDrawable(new BitmapDrawable());
-        pw.showAsDropDown(findViewById(R.id.img_right));
+        final PopupWindow popupWindow = new PopupWindow(v, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        popupWindow.setContentView(v);
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setFocusable(true);
+        popupWindow.setBackgroundDrawable(new BitmapDrawable());
+        popupWindow.showAsDropDown(findViewById(R.id.img_right));
         TextView action_device_token = v.findViewById(R.id.action_device_token);
         TextView action_help_center = v.findViewById(R.id.action_help_center);
         TextView action_about_us = v.findViewById(R.id.action_about_us);
@@ -313,9 +311,8 @@ public class MainActivity extends Activity implements OnItemClickListener {
         action_device_token.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pw.dismiss();
-                Intent deviceIntent = new Intent();
-                deviceIntent.setClass(context, DeviceActivity.class);
+                popupWindow.dismiss();
+                Intent deviceIntent = new Intent(context, DeviceActivity.class);
                 startActivity(deviceIntent);
 
             }
@@ -323,25 +320,23 @@ public class MainActivity extends Activity implements OnItemClickListener {
         action_help_center.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pw.dismiss();
-                Intent helpIntent = new Intent();
-                helpIntent.setClass(context, HelpActivity.class);
+                popupWindow.dismiss();
+                Intent helpIntent = new Intent(context, HelpActivity.class);
                 startActivity(helpIntent);
             }
         });
         action_about_us.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pw.dismiss();
-                Intent aboutIntent = new Intent();
-                aboutIntent.setClass(context, AboutActivity.class);
+                popupWindow.dismiss();
+                Intent aboutIntent = new Intent(context, AboutActivity.class);
                 startActivity(aboutIntent);
             }
         });
         action_clear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pw.dismiss();
+                popupWindow.dismiss();
                 adapter.setData(null);
                 adapter.notifyDataSetChanged();
                 findViewById(R.id.nodata).setVisibility(View.VISIBLE);
@@ -354,18 +349,16 @@ public class MainActivity extends Activity implements OnItemClickListener {
         action_setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pw.dismiss();
-                Intent settingIntent = new Intent();
-                settingIntent.setClass(context, SettingActivity.class);
+                popupWindow.dismiss();
+                Intent settingIntent = new Intent(context, SettingActivity.class);
                 startActivity(settingIntent);
             }
         });
         action_diagnosis.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pw.dismiss();
-                Intent settingIntent = new Intent();
-                settingIntent.setClass(context, DiagnosisActivity.class);
+                popupWindow.dismiss();
+                Intent settingIntent = new Intent(context, DiagnosisActivity.class);
                 startActivity(settingIntent);
             }
         });
@@ -375,7 +368,7 @@ public class MainActivity extends Activity implements OnItemClickListener {
 
         private Activity mActivity;
         private LayoutInflater mInflater;
-        List<XGNotification> adapterData;
+        private List<XGNotification> adapterData;
 
         public pushAdapter(Activity aActivity) {
             mActivity = aActivity;
@@ -408,7 +401,7 @@ public class MainActivity extends Activity implements OnItemClickListener {
         @SuppressLint("SimpleDateFormat")
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            pushViewHolder aholder = null;
+            pushViewHolder aholder;
             XGNotification item = adapterData.get(position);
             if (convertView == null) {
                 aholder = new pushViewHolder();
@@ -416,8 +409,7 @@ public class MainActivity extends Activity implements OnItemClickListener {
                 aholder.msg_idv = convertView.findViewById(R.id.push_msg_id);
                 aholder.contentv = convertView.findViewById(R.id.push_content);
                 aholder.timev = convertView.findViewById(R.id.push_time);
-                aholder.titlev = convertView
-                        .findViewById(R.id.push_title);
+                aholder.titlev = convertView.findViewById(R.id.push_title);
                 convertView.setTag(aholder);
             } else {
                 aholder = (pushViewHolder) convertView.getTag();
@@ -426,10 +418,8 @@ public class MainActivity extends Activity implements OnItemClickListener {
             aholder.msg_idv.setText("ID:" + item.getMsg_id());
             aholder.titlev.setText(item.getTitle());
             aholder.contentv.setText(item.getContent());
-            if (item.getUpdate_time() != null
-                    && item.getUpdate_time().length() > 18) {
-                String notificationdate = item.getUpdate_time()
-                        .substring(0, 10);
+            if (item.getUpdate_time() != null && item.getUpdate_time().length() > 18) {
+                String notificationdate = item.getUpdate_time().substring(0, 10);
                 String notificationtime = item.getUpdate_time().substring(11);
                 if (new SimpleDateFormat("yyyy-MM-dd").format(
                         Calendar.getInstance().getTime()).equals(notificationdate)) {
@@ -442,14 +432,13 @@ public class MainActivity extends Activity implements OnItemClickListener {
             }
             return convertView;
         }
-    }
 
-
-    private class pushViewHolder {
-        TextView msg_idv;
-        TextView titlev;
-        TextView timev;
-        TextView contentv;
+        private class pushViewHolder {
+            TextView msg_idv;
+            TextView titlev;
+            TextView timev;
+            TextView contentv;
+        }
     }
 
     @Override
